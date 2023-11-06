@@ -18,6 +18,11 @@ class Button:
             return True
         return False
 
+    def update_text_button(self, text, screen):
+        self.text = self.get_font(50).render(text, True, "White")
+        self.rect = self.text.get_rect(center=self.position)
+        self.update(screen)
+
     def update(self, screen):
         pygame.draw.rect(screen, self.rect_color, self.rect)
 
