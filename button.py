@@ -7,7 +7,7 @@ class Button:
         self.position = position
         self.text = self.get_font(50).render(text_button, True, "White")
         self.text_color = "White"
-        self.rect_color = "RED"
+        self.rect_color = "#79A0FF"
         self.rect = self.text.get_rect(center=self.position)
     
     def get_font(self, size):

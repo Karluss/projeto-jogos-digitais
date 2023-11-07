@@ -1,7 +1,7 @@
 class GameState:
     def __init__(self):
         self.state = "MENU"
-        self.sound = "OFF"
+        self.sound = "ON"
     
     def update(self, state): 
         self.state = state
