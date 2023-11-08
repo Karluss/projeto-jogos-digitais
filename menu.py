@@ -39,6 +39,9 @@ def menu(screen, game_state):
         if play_button.checkForInput(mouse_pos):
             print("DEBUG: CLIQUE EM PLAY")
             game_state.update("LEVEL")
+        if instruction_button.checkForInput(mouse_pos):
+            print("DEBUG: CLIQUE EM INSTRUCTION")
+            game_state.update("INSTRUCTION")
         if sound_button.checkForInput(mouse_pos) and not SOUND_BUTTON_PRESSED:
             if game_state.get_sound_state() == "ON":
                 print("DEBUG: CLIQUE EM SOUND OFF")

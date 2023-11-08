@@ -3,6 +3,7 @@ from settings_map import *
 from level import Level
 from menu import menu
 from game_state import GameState
+from instructions import instructions
 
 pygame.init()
 pygame.mixer.init()
@@ -30,6 +31,8 @@ while True:
         menu(screen, game_state)
     elif game_state.state == "LEVEL":
         level.run()
+    elif game_state.state == "INSTRUCTION":
+        instructions(screen, game_state)
 
     pygame.display.update()
     clock.tick(60)
