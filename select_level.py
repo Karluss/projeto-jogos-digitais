@@ -2,9 +2,6 @@ import pygame
 from settings_map import *
 from button import Button
 
-DESATIVAR_SOM_TEXT = " DESATIVAR SOM "
-ATIVAR_SOM_TEXT = " ATIVAR SOM "
-
 def get_font(size):
     return pygame.font.Font("assets/fonts/campus_font.ttf", size)
 
@@ -15,7 +12,7 @@ def select_level(screen, game_state):
 
     select_level_name = get_font(100).render("SELECIONE A FASE", True, "#3A73FF")
     select_level_rect = select_level_name.get_rect(center=(screen_width/2,screen_height/4.5))
-    screen.blit(select_level_name, select_level_rect)
+    screen.blit(select_level_name, select_level_rect)  
 
     beach_button = Button((screen_width/3, screen_height/2.4), " PRAIA ")
     city_button = Button((screen_width/1.6, screen_height/2.4), " CIDADE ")
