@@ -5,16 +5,15 @@ from player import Player
 from ranking import RANKING_DICT_POINTS, RANKING_DICT_NAME
 
 class Level:
-    def __init__(self,level_data,surface):
+    def __init__(self,surface):
         self.display_surface = surface
-        self.setup_level(level_data)
         self.world_shift = 0
         self.current_x = 0
         self.time_remaining = 60
         self.start_time = pygame.time.get_ticks()
         self.points = 0
 
-    def setup_level(self,layout):
+    def setup_level(self,layout, game_state):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         for row_index, row in enumerate(layout):
@@ -22,7 +21,7 @@ class Level:
                 x = tile_size * col_index
                 y = tile_size * row_index
                 if cell == 'X':
-                    tile = Tile((x,y),tile_size)
+                    tile = Tile((x,y),game_state.level)
                     self.tiles.add(tile)
                 if cell == 'P':
                     player_sprite = Player((x,y))
@@ -98,10 +97,21 @@ class Level:
         countdown_text = self.get_font("assets/fonts/BebasNeue-Regular.ttf", 50).render(f"{remaining_seconds}", True, "Red")
         countdown_rect = countdown_text.get_rect(center=(screen_width/2,screen_height/7))
         screen.blit(countdown_text, countdown_rect)
+
+    def get_level_map(self, game_state):
+        if game_state.level == "PRAIA":
+            return beach_map
+        elif game_state.level == "CIDADE":
+            return city_map
+        elif game_state.level == "PORTO":
+            return port_map
+
     def run(self, game_state, screen):
 
+        level_map = self.get_level_map(game_state)
+
         if game_state.restart_level:
-            self.setup_level(level_map)  
+            self.setup_level(level_map, game_state)  
             game_state.restart_level = False
             self.points = 0
             if game_state.sound == "ON":

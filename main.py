@@ -14,7 +14,7 @@ pygame.mixer.init()
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
-level = Level(level_map,screen)
+level = Level(screen)
 game_state = GameState()
 input = InputBox(screen_width/3, screen_height/1.5,int(screen_width/3), int(screen_height/6), 'Player1')
 img_background = pygame.image.load("assets/graphics/background/sky.png")

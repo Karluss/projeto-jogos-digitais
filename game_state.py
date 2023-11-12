@@ -6,6 +6,7 @@ class GameState:
         self.user_name = "Player1"
         self.user_score = 0
         self.run_id = 1
+        self.level = ""
     
     def update(self, state): 
         self.state = state
