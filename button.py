@@ -11,7 +11,7 @@ class Button:
         self.rect = self.text.get_rect(center=self.position)
     
     def get_font(self, size):
-        return pygame.font.Font("assets/BebasNeue-Regular.ttf", size)
+        return pygame.font.Font("assets/fonts/BebasNeue-Regular.ttf", size)
     
     def checkForInput(self, position):
         if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):

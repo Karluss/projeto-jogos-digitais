@@ -2,8 +2,8 @@ import pygame
 from settings_map import *
 from button import Button
 
-TITLE_FONT = "assets/campus_font.ttf"
-INSTRUCTIONS_FONT = "assets/BebasNeue-Regular.ttf"
+TITLE_FONT = "assets/fonts/campus_font.ttf"
+INSTRUCTIONS_FONT = "assets/fonts/BebasNeue-Regular.ttf"
 INSTRUCTIONS_ARRAY = ["Corra para sobreviver à tsunami", "O cronômetro mostra em quanto tempo chega a tsunami", "Evite cair em buracos para sobreviver", "Se esbarrar com alguém, isso irá te atrasar", "Chegue ao local alto no fim para sobreviver!"]
 
 def get_font(font_type, size):

@@ -90,7 +90,7 @@ class Level:
     def countdown(self,screen): 
         elapsed_time = pygame.time.get_ticks() - self.start_time
         remaining_seconds = max(0, self.time_remaining - elapsed_time / 1000)  # Convertendo milissegundos para segundos
-        countdown_text = self.get_font("assets/BebasNeue-Regular.ttf", 50).render(f"{remaining_seconds}", True, "Red")
+        countdown_text = self.get_font("assets/fonts/BebasNeue-Regular.ttf", 50).render(f"{remaining_seconds}", True, "Red")
         countdown_rect = countdown_text.get_rect(center=(screen_width/2,screen_height/7))
         screen.blit(countdown_text, countdown_rect)
     def run(self, game_state, screen):
@@ -98,6 +98,10 @@ class Level:
         if game_state.restart_level:
             self.setup_level(level_map)  
             game_state.restart_level = False
+            if game_state.sound == "ON":
+                pygame.mixer.music.load("assets/music/Soundtrack da fase.mp3")
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(0.5)
 
         #level tiles
         self.tiles.update(self.world_shift)

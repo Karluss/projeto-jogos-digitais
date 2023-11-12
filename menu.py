@@ -7,7 +7,7 @@ ATIVAR_SOM_TEXT = " ATIVAR SOM "
 SOUND_BUTTON_PRESSED = False
 
 def get_font(size):
-    return pygame.font.Font("assets/campus_font.ttf", size)
+    return pygame.font.Font("assets/fonts/campus_font.ttf", size)
 
 def set_button_position(button, screen):
     button.update(screen)
