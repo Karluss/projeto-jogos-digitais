@@ -7,7 +7,7 @@ ATIVAR_SOM_TEXT = " ATIVAR SOM "
 SOUND_BUTTON_PRESSED = False
 
 def get_font(size):
-    return pygame.font.Font("assets/fonts/campus_font.ttf", size)
+    return pygame.font.Font("assets/campus_font.ttf", size)
 
 def set_button_position(button, screen):
     button.update(screen)
@@ -29,8 +29,9 @@ def menu(screen, game_state):
     play_button = Button((screen_width/3, screen_height/2), " JOGAR ")
     instruction_button = Button((screen_width/1.4, screen_height/2), " INSTRUÇÕES ")
     sound_button = set_button_sound(game_state)
+    ranking_button = Button((screen_width/2, screen_height/1.5), " RANKING ")
 
-    for button in [instruction_button, play_button, sound_button]:
+    for button in [instruction_button, play_button, sound_button, ranking_button]:
         set_button_position(button, screen)
 
     mouse_pos = pygame.mouse.get_pos()
@@ -38,25 +39,24 @@ def menu(screen, game_state):
     if pygame.mouse.get_pressed()[0]:
         if play_button.checkForInput(mouse_pos):
             print("DEBUG: CLIQUE EM PLAY")
-            game_state.update("SELECT_LEVEL")
+            game_state.update("LEVEL")
         if instruction_button.checkForInput(mouse_pos):
-            print("DEBUG: CLIQUE EM INSTRUCTION")
+            print("DEBUG: CLICOU EM INSTRUÇÕES")
             game_state.update("INSTRUCTION")
         if sound_button.checkForInput(mouse_pos) and not SOUND_BUTTON_PRESSED:
             if game_state.get_sound_state() == "ON":
-                print("DEBUG: CLIQUE EM SOUND OFF")
+                print("DEBUG: CLICOU EM DESATIVAR SOM")
                 game_state.set_sound_state("OFF")
                 button.update_text_button(ATIVAR_SOM_TEXT, screen)
                 pygame.mixer.music.stop()
             else:
-                print("DEBUG: CLIQUE EM SOUND ON")
+                print("DEBUG: CLICOU EM ATIVAR SOM")
                 game_state.set_sound_state("ON")
                 button.update_text_button(DESATIVAR_SOM_TEXT, screen)
                 pygame.mixer.music.play(-1)
             SOUND_BUTTON_PRESSED = True
+        if ranking_button.checkForInput(mouse_pos):
+            print("DEBUG: CLICOU EM RANKING")
+            game_state.update("RANKING")
     else:
-        SOUND_BUTTON_PRESSED = False 
-
-
-
-
+        SOUND_BUTTON_PRESSED = False # Para corrigir o comportamento do botão de som
