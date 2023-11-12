@@ -1,10 +1,12 @@
 import pygame
 from settings_map import *
 from button import Button
+import operator
 
 TITLE_FONT = "assets/fonts/campus_font.ttf"
 RANKING_FONT = "assets/fonts/BebasNeue-Regular.ttf"
-RANKING_ARRAY = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+RANKING_DICT_POINTS = {}
+RANKING_DICT_NAME = {}
 
 def get_font(font_type, size):
     return pygame.font.Font(font_type, size)
@@ -21,8 +23,12 @@ def ranking(screen, game_state):
     ranking_rect = ranking_text.get_rect(center=(screen_width/2,screen_height/7))
     screen.blit(ranking_text, ranking_rect)
 
-    for i in range(len(RANKING_ARRAY)):
-        set_ranking_text(f"{i+1} - {RANKING_ARRAY[i]}", i, screen)
+    top_five_dict = dict(sorted(RANKING_DICT_POINTS.items(), key=lambda item: item[1], reverse=True)[:6])
+
+    pos = 1
+    for key in top_five_dict.keys():
+        set_ranking_text(f"{pos} - {RANKING_DICT_NAME[key]} - {RANKING_DICT_POINTS[key]}", pos, screen)
+        pos += 1
     
     back_button = Button((100, 50), "<- MENU")
     back_button.update(screen)

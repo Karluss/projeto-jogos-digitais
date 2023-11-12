@@ -21,6 +21,7 @@ img_background = pygame.image.load("assets/graphics/background/sky.png")
 img = pygame.transform.scale(img_background,(screen_width, screen_height*1.2))
 music_background = pygame.mixer.music.load("assets/music/beach sound effect.mp3")
 pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
 
 
 def set_input_text():

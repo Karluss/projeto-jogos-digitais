@@ -2,6 +2,7 @@ import pygame
 from tiles import Tile
 from settings_map import *
 from player import Player
+from ranking import RANKING_DICT_POINTS, RANKING_DICT_NAME
 
 class Level:
     def __init__(self,level_data,surface):
@@ -11,6 +12,7 @@ class Level:
         self.current_x = 0
         self.time_remaining = 60
         self.start_time = pygame.time.get_ticks()
+        self.points = 0
 
     def setup_level(self,layout):
         self.tiles = pygame.sprite.Group()
@@ -82,6 +84,9 @@ class Level:
             player.on_ceiling = False
         
         if player.rect.y > screen_height:
+            RANKING_DICT_POINTS[game_state.run_id] = self.points
+            RANKING_DICT_NAME[game_state.run_id] = game_state.user_name
+            game_state.run_id += 1
             game_state.update("GAME OVER")
     
     def get_font(self, font_type, size):
@@ -98,11 +103,12 @@ class Level:
         if game_state.restart_level:
             self.setup_level(level_map)  
             game_state.restart_level = False
+            self.points = 0
             if game_state.sound == "ON":
                 pygame.mixer.music.load("assets/music/Soundtrack da fase.mp3")
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(0.1)
-
+        self.points += 1
         #level tiles
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
