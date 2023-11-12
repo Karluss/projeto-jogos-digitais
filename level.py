@@ -1,6 +1,6 @@
 import pygame 
 from tiles import Tile
-from settings_map import tile_size, screen_width
+from settings_map import *
 from player import Player
 
 class Level:
@@ -60,7 +60,7 @@ class Level:
             player.on_left = False
         if player.on_right and (player.rect.right < self.current_x or player.direction.x <= 0):
             player.on_right = False
-    def vertical_movement_collision(self):
+    def vertical_movement_collision(self, game_state):
         player = self.player.sprite 
         player.apply_gravity()
 
@@ -78,8 +78,16 @@ class Level:
             player.on_ground = False
         if player.on_ceiling and player.direction.y > 0:
             player.on_ceiling = False
+        
+        if player.rect.y > screen_height:
+            game_state.update("GAME OVER")
 
-    def run(self):
+    def run(self, game_state):
+
+        if game_state.restart_level:
+            self.setup_level(level_map)  
+            game_state.restart_level = False
+
         #level tiles
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
@@ -89,5 +97,5 @@ class Level:
         self.player.update()
         self.player.draw(self.display_surface)
         self.horizontal_movement_collision()
-        self.vertical_movement_collision()
+        self.vertical_movement_collision(game_state)
         

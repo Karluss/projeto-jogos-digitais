@@ -4,6 +4,7 @@ from level import Level
 from menu import menu
 from game_state import GameState
 from instructions import instructions
+from game_over import game_over
 
 pygame.init()
 pygame.mixer.init()
@@ -16,6 +17,7 @@ img_background = pygame.image.load("assets\BG.png")
 img = pygame.transform.scale(img_background,(screen_width, screen_height))
 music_background = pygame.mixer.music.load("assets\SuperMarioBros.mp3")
 pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.05)
 
 
 while True:     
@@ -30,9 +32,12 @@ while True:
     if game_state.state == "MENU":
         menu(screen, game_state)
     elif game_state.state == "LEVEL":
-        level.run()
+        level.run(game_state)
+        game_state.should_restart_level = True
     elif game_state.state == "INSTRUCTION":
         instructions(screen, game_state)
+    elif game_state.state == "GAME OVER":
+        game_over(screen, game_state)
 
     pygame.display.update()
     clock.tick(60)
