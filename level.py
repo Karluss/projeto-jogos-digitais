@@ -9,6 +9,8 @@ class Level:
         self.setup_level(level_data)
         self.world_shift = 0
         self.current_x = 0
+        self.time_remaining = 60
+        self.start_time = pygame.time.get_ticks()
 
     def setup_level(self,layout):
         self.tiles = pygame.sprite.Group()
@@ -81,8 +83,17 @@ class Level:
         
         if player.rect.y > screen_height:
             game_state.update("GAME OVER")
-
-    def run(self, game_state):
+    
+    def get_font(self, font_type, size):
+        return pygame.font.Font(font_type, size)
+    
+    def countdown(self,screen): 
+        elapsed_time = pygame.time.get_ticks() - self.start_time
+        remaining_seconds = max(0, self.time_remaining - elapsed_time / 1000)  # Convertendo milissegundos para segundos
+        countdown_text = self.get_font("assets/BebasNeue-Regular.ttf", 50).render(f"{remaining_seconds}", True, "Red")
+        countdown_rect = countdown_text.get_rect(center=(screen_width/2,screen_height/7))
+        screen.blit(countdown_text, countdown_rect)
+    def run(self, game_state, screen):
 
         if game_state.restart_level:
             self.setup_level(level_map)  
@@ -98,4 +109,7 @@ class Level:
         self.player.draw(self.display_surface)
         self.horizontal_movement_collision()
         self.vertical_movement_collision(game_state)
+
+        # countdown
+        self.countdown(screen)
         
