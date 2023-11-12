@@ -2,8 +2,8 @@ import pygame
 from settings_map import *
 from button import Button
 
-TITLE_FONT = "assets/campus_font.ttf"
-RANKING_FONT = "assets/BebasNeue-Regular.ttf"
+TITLE_FONT = "assets/fonts/campus_font.ttf"
+RANKING_FONT = "assets/fonts/BebasNeue-Regular.ttf"
 RANKING_ARRAY = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
 
 def get_font(font_type, size):
