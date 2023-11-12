@@ -38,7 +38,7 @@ def menu(screen, game_state):
     if pygame.mouse.get_pressed()[0]:
         if play_button.checkForInput(mouse_pos):
             print("DEBUG: CLIQUE EM PLAY")
-            game_state.update("LEVEL")
+            game_state.update("SELECT_LEVEL")
         if instruction_button.checkForInput(mouse_pos):
             print("DEBUG: CLIQUE EM INSTRUCTION")
             game_state.update("INSTRUCTION")
@@ -55,7 +55,7 @@ def menu(screen, game_state):
                 pygame.mixer.music.play(-1)
             SOUND_BUTTON_PRESSED = True
     else:
-        SOUND_BUTTON_PRESSED = False # Para corrigir o comportamento do botão de som
+        SOUND_BUTTON_PRESSED = False 
 
 
 

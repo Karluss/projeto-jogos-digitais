@@ -5,6 +5,7 @@ from menu import menu
 from game_state import GameState
 from instructions import instructions
 from game_over import game_over
+from select_level import select_level
 
 pygame.init()
 pygame.mixer.init()
@@ -14,10 +15,10 @@ clock = pygame.time.Clock()
 level = Level(level_map,screen)
 game_state = GameState()
 img_background = pygame.image.load("assets/graphics/background/sky.png")
-img = pygame.transform.scale(img_background,(screen_width, screen_height))
+img = pygame.transform.scale(img_background,(screen_width, screen_height*1.2))
 music_background = pygame.mixer.music.load("assets/music/beach sound effect.mp3")
 pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(1)
+pygame.mixer.music.set_volume(0.5)
 
 
 while True:     
@@ -37,6 +38,8 @@ while True:
         instructions(screen, game_state)
     elif game_state.state == "GAME OVER":
         game_over(screen, game_state)
+    elif game_state.state == "SELECT_LEVEL":
+        select_level(screen, game_state)
 
     pygame.display.update()
     clock.tick(60)

@@ -101,7 +101,7 @@ class Level:
             if game_state.sound == "ON":
                 pygame.mixer.music.load("assets/music/Soundtrack da fase.mp3")
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(0.5)
+                pygame.mixer.music.set_volume(0.1)
 
         #level tiles
         self.tiles.update(self.world_shift)

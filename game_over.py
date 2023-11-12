@@ -31,5 +31,5 @@ def game_over(screen, game_state):
             if game_state.sound == "ON":
                 pygame.mixer.music.load("assets/music/beach sound effect.mp3")
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(1)
+                pygame.mixer.music.set_volume(0.5)
 
