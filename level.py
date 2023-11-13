@@ -14,8 +14,13 @@ class Level:
         self.temporizer = True
         self.points = 0
         self.win = False
+        self.wave = pygame.transform.scale(pygame.image.load("assets/graphics/water/tsunami.png"),(screen_width/3, screen_height/1.7)) 
+        self.wave_x = -150
+        self.wave_rect = self.wave.get_rect(center=(screen_width/3, screen_height/1.7))
+        self.overlap_frames = 0
 
     def setup_level(self,layout, game_state):
+        print(self.wave)
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         for row_index, row in enumerate(layout):
@@ -87,15 +92,22 @@ class Level:
                     player.direction.y = 0
                     player.on_ground = True
                     if sprite.isWin:
+                        self.wave_x += 5  # A onda movendo
                         player.status = 'idle'
                         player.stop = True
                         self.win = True
-                        if not game_state.end:
-                            RANKING_DICT_POINTS[game_state.run_id] = self.points
-                            RANKING_DICT_NAME[game_state.run_id] = game_state.user_name
-                            game_state.run_id += 1
-                        game_state.end = True
-                        self.set_win(screen, game_state)
+
+                        if self.wave_x > screen_width: # Confere se a onda saiu da tela pra mostrar a vitória
+                            if not game_state.end:
+                                RANKING_DICT_POINTS[game_state.run_id] = self.points
+                                RANKING_DICT_NAME[game_state.run_id] = game_state.user_name
+                                game_state.run_id += 1
+                            game_state.end = True
+                            self.set_win(screen, game_state)
+
+                        self.wave_rect.bottomleft = (self.wave_x, screen_height)
+
+                        self.display_surface.blit(self.wave, self.wave_rect)
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
@@ -147,8 +159,24 @@ class Level:
 
             if remaining_time <= 0:
                 self.temporizer = False
-                game_state.update("GAME OVER")
             
+    def call_wave_to_game_over(self, game_state):
+        player = self.player.sprite
+        player.stop = True
+        self.wave_x += 5  # A onda movendo
+
+        if self.wave_rect.colliderect(player.rect):
+            self.overlap_frames += 1
+        else:
+            self.overlap_frames = 0  # Resetar o contador se não houver sobreposição
+
+        # Se houver sobreposição por um número mínimo de frames, chame game_state.update
+        if self.overlap_frames == 30:
+            game_state.update("GAME OVER")
+        
+        self.wave_rect.bottomleft = (self.wave_x, screen_height)
+
+        self.display_surface.blit(self.wave, self.wave_rect)
 
     def get_level_map(self, game_state):
         if game_state.level == "PRAIA":
@@ -170,6 +198,8 @@ class Level:
             self.win = False
             self.temporizer = True  # Habilitando o temporizador novamente
             self.points = 0
+            self.wave_x = -150
+            self.overlap_frames = 0
             if game_state.sound == "ON":
                 pygame.mixer.music.load("assets/music/Soundtrack da fase.mp3")
                 pygame.mixer.music.play(-1)
@@ -188,4 +218,7 @@ class Level:
         # countdown
         if not self.win:
             self.countdown(screen,game_state)
-        
+
+        if not self.temporizer:
+            self.call_wave_to_game_over(game_state)
+

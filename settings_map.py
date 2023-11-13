@@ -21,14 +21,14 @@ city_map = [
 ]
 
 port_map = [
-'                                                                                        I',
-'                                                                                        I',
-'                                                                                        I',
-'                                                                                        I',
-'                                                                                       WI',
-'                  O        OO        O                                              S  SI',
-'   P        O   OOO       OOO       OO    O O     O  O         O     O           S  S  SI',
-'XXXXXXX   XXXXXXXXXXXX   XXXXXXXXXXXXXXXXXXXXX  XXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXX  X  XI',
+'                                                                                           I',
+'                                                                                           I',
+'                                                                                           I',
+'                                                                                          WI',
+'                                                                                       S  SI',
+'                  O        OO        O                                              S  S  SI',
+'   P        O   OOO       OOO       OO   O  O     O  O         O     O           S  S  S  SI',
+'XXXXXXX   XXXXXXXXXXXX   XXXXXXXXXXXXXXXXXXXXX  XXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXX  X  X  XI',
 ]
 
 tile_size = 64
