@@ -1,34 +1,34 @@
 beach_map = [
-'                                  ',
-'                                  ',
-'      P                           ',
-'                                  ',
-'                                  ',
-'                                  ',
-'   X                      X       ',
-'XXXXXXX   XXXXXXXXXXXX   XXXXXXXXX',
+'                                                                                        ',
+'                                                                                        ',
+'                                                                                        ',
+'                                                                                        ',
+'                            O                                                        SSS',
+'                           OO                                                       SSSS',
+'   P                      OOO        O      O     O  O         O     O             SSSSS',
+'XXXXXXX   XXXXXXXXXXXX   XXXXXXXXXXXXXXXXXXXXX  XXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 ]
 
 city_map = [
-'                                  ',
-'                                  ',
-'      P                           ',
-'                                  ',
-'                                  ',
-'                                  ',
-'                          X       ',
-'XXXXXXX   XXXXXXXXXXXX   XXXXXXXXX',
+'                                                                                        ',
+'                                                                                        ',
+'                                                                                        ',
+'                                                                                        ',
+'                            O                                                        SSS',
+'                           OO                                                       SSSS',
+'   P                      OOO        O      O     O  O         O     O             SSSSS',
+'XXXXXXX   XXXXXXXXXXXX   XXXXXXXXXXXXXXXXXXXXX  XXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 ]
 
 port_map = [
-'                                  ',
-'                                  ',
-'      P                           ',
-'                                  ',
-'                                  ',
-'                                  ',
-'   X                      X       ',
-'XXXXXXX   XXXXXXXXXXXX   XXXXXXXXX',
+'                                                                                        ',
+'                                                                                        ',
+'                                                                                        ',
+'                                                                                        ',
+'                            O                                                        SSS',
+'                           OO                                                       SSSS',
+'   P                      OOO        O      O     O  O         O     O             SSSSS',
+'XXXXXXX   XXXXXXXXXXXX   XXXXXXXXXXXXXXXXXXXXX  XXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 ]
 
 tile_size = 64

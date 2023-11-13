@@ -13,6 +13,10 @@ class Tile(pygame.sprite.Sprite):
             return pygame.image.load("assets/graphics/concrete/concreto_bloco.png")
         elif level == "PORTO":
             return pygame.image.load("assets/graphics/wood/pier_textura.jpg")
+        elif level == "SAFE":
+            return pygame.image.load("assets/graphics/bricks/tijolo_casas.png")
+        elif level == "OBSTACLE":
+            return pygame.image.load("assets/graphics/wood/Crate.png")
 
     def update(self, x_shift): 
         self.rect.x += x_shift

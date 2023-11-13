@@ -26,6 +26,12 @@ class Level:
                 if cell == 'P':
                     player_sprite = Player((x,y))
                     self.player.add(player_sprite)
+                if cell == 'S':
+                    tile = Tile((x,y),"SAFE")
+                    self.tiles.add(tile)
+                if cell == 'O':
+                    tile = Tile((x,y),"OBSTACLE")
+                    self.tiles.add(tile)
 
     def scroll_x(self):  
         player = self.player.sprite
