@@ -4,20 +4,18 @@ from settings_map import *
 from player import Player
 from game_state import GameState
 from game_over import game_over
-
-
-
+from ranking import RANKING_DICT_POINTS, RANKING_DICT_NAME
 
 class Level:
-    def __init__(self,level_data,surface):
+    def __init__(self,surface):
         self.display_surface = surface
-        self.setup_level(level_data)
         self.world_shift = 0
         self.current_x = 0
         self.game_timer = pygame.time.get_ticks()
         self.temporizer = True
+        self.points = 0
 
-    def setup_level(self,layout):
+    def setup_level(self,layout, game_state):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         for row_index, row in enumerate(layout):
@@ -25,11 +23,17 @@ class Level:
                 x = tile_size * col_index
                 y = tile_size * row_index
                 if cell == 'X':
-                    tile = Tile((x,y),tile_size)
+                    tile = Tile((x,y),game_state.level)
                     self.tiles.add(tile)
                 if cell == 'P':
                     player_sprite = Player((x,y))
                     self.player.add(player_sprite)
+                if cell == 'S':
+                    tile = Tile((x,y),"SAFE")
+                    self.tiles.add(tile)
+                if cell == 'O':
+                    tile = Tile((x,y),"OBSTACLE")
+                    self.tiles.add(tile)
 
     def scroll_x(self):  
         player = self.player.sprite
@@ -87,6 +91,9 @@ class Level:
             player.on_ceiling = False
         
         if player.rect.y > screen_height:
+            RANKING_DICT_POINTS[game_state.run_id] = self.points
+            RANKING_DICT_NAME[game_state.run_id] = game_state.user_name
+            game_state.run_id += 1
             game_state.update("GAME OVER")
     
     def get_font(self, font_type, size):
@@ -105,30 +112,31 @@ class Level:
             if remaining_time <= 0:
                 self.temporizer = False
                 game_state.update("GAME OVER")
+            
 
+    def get_level_map(self, game_state):
+        if game_state.level == "PRAIA":
+            return beach_map
+        elif game_state.level == "CIDADE":
+            return city_map
+        elif game_state.level == "PORTO":
+            return port_map
 
     def run(self, game_state, screen):
+
+        level_map = self.get_level_map(game_state)
+
         if game_state.restart_level:
-            self.setup_level(level_map)
+            self.setup_level(level_map, game_state)  
             self.game_timer = pygame.time.get_ticks()  # Reiniciando o timer
             game_state.restart_level = False
             self.temporizer = True  # Habilitando o temporizador novamente
+            self.points = 0
             if game_state.sound == "ON":
                 pygame.mixer.music.load("assets/music/Soundtrack da fase.mp3")
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(0.5)
-            
-
-    #def run(self, game_state, screen):
-
-        #if game_state.restart_level:
-            #self.setup_level(level_map)  
-            #game_state.restart_level = False
-            #if game_state.sound == "ON":
-                #pygame.mixer.music.load("assets/music/Soundtrack da fase.mp3")
-                #pygame.mixer.music.play(-1)
-                #pygame.mixer.music.set_volume(0.5)
-
+                pygame.mixer.music.set_volume(0.1)
+        self.points += 1
         #level tiles
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)

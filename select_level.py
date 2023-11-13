@@ -30,12 +30,15 @@ def select_level(screen, game_state):
         if beach_button.checkForInput(mouse_pos):
             print("DEBUG: CLIQUE EM BEACH")
             game_state.update("LEVEL")
+            game_state.level = "PRAIA"
         if city_button.checkForInput(mouse_pos):
             print("DEBUG: CLIQUE EM CITY")
             game_state.update("LEVEL")
+            game_state.level = "CIDADE"
         if port_button.checkForInput(mouse_pos):
             print("DEBUG: CLIQUE EM PORT")
             game_state.update("LEVEL")
+            game_state.level = "PORTO"
         if back_button.checkForInput(mouse_pos):
             print("DEBUG: CLIQUE EM MENU")
             game_state.update("MENU")

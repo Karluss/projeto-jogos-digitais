@@ -14,13 +14,20 @@ pygame.mixer.init()
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
-level = Level(level_map,screen)
+level = Level(screen)
 game_state = GameState()
 input = InputBox(screen_width/3, screen_height/1.5,int(screen_width/3), int(screen_height/6), 'Player1')
-img_background = pygame.image.load("assets/graphics/background/sky.png")
-img = pygame.transform.scale(img_background,(screen_width, screen_height*1.2))
+
+img_background_sky = pygame.image.load("assets/graphics/background/bach.jpg")
+img_sky = pygame.transform.scale(img_background_sky,(screen_width, screen_height*1.1))
+img_background_city = pygame.image.load("assets/graphics/background/city.png")
+img_city = pygame.transform.scale(img_background_city,(screen_width, screen_height*1.2))
+img_background_port = pygame.image.load("assets/graphics/background/port.jpg")
+img_port = pygame.transform.scale(img_background_port,(screen_width, screen_height*1.4))
+
 music_background = pygame.mixer.music.load("assets/music/beach sound effect.mp3")
 pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
 
 
 def set_input_text():
@@ -39,8 +46,14 @@ while True:
             sys.exit()
         input.handle_event(event)
 
-    screen.fill('black')
-    screen.blit(img, (0,0))
+    screen.fill('blue')
+
+    if game_state.level == "CIDADE":
+        screen.blit(img_city, (0,0))
+    elif game_state.level == "PORTO":
+        screen.blit(img_port, (0,0))
+    else:
+        screen.blit(img_sky, (0,0))
 
     if game_state.state == "MENU":
         menu(screen, game_state)
