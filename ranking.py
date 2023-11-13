@@ -23,7 +23,7 @@ def ranking(screen, game_state):
     ranking_rect = ranking_text.get_rect(center=(screen_width/2,screen_height/7))
     screen.blit(ranking_text, ranking_rect)
 
-    top_five_dict = dict(sorted(RANKING_DICT_POINTS.items(), key=lambda item: item[1], reverse=False)[:6])
+    top_five_dict = dict(sorted(RANKING_DICT_POINTS.items(), key=lambda item: item[1], reverse=True)[:6])
 
     pos = 1
     for key in top_five_dict.keys():
