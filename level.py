@@ -2,9 +2,8 @@ import pygame
 from tiles import Tile
 from settings_map import *
 from player import Player
-from game_state import GameState
-from game_over import game_over
 from ranking import RANKING_DICT_POINTS, RANKING_DICT_NAME
+from button import Button
 
 class Level:
     def __init__(self,surface):
@@ -14,6 +13,7 @@ class Level:
         self.game_timer = pygame.time.get_ticks()
         self.temporizer = True
         self.points = 0
+        self.win = False
 
     def setup_level(self,layout, game_state):
         self.tiles = pygame.sprite.Group()
@@ -28,11 +28,16 @@ class Level:
                 if cell == 'P':
                     player_sprite = Player((x,y))
                     self.player.add(player_sprite)
-                if cell == 'S':
+                if cell == 'S' or cell == 'W':
                     tile = Tile((x,y),"SAFE")
+                    if cell == 'W':
+                        tile.isWin = True
                     self.tiles.add(tile)
                 if cell == 'O':
                     tile = Tile((x,y),"OBSTACLE")
+                    self.tiles.add(tile)
+                if cell == 'I':
+                    tile = Tile((x,y),"INV")
                     self.tiles.add(tile)
 
     def scroll_x(self):  
@@ -71,7 +76,7 @@ class Level:
             player.on_left = False
         if player.on_right and (player.rect.right < self.current_x or player.direction.x <= 0):
             player.on_right = False
-    def vertical_movement_collision(self, game_state):
+    def vertical_movement_collision(self, game_state, screen):
         player = self.player.sprite 
         player.apply_gravity()
 
@@ -81,6 +86,16 @@ class Level:
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
                     player.on_ground = True
+                    if sprite.isWin:
+                        player.status = 'idle'
+                        player.stop = True
+                        self.win = True
+                        if not game_state.end:
+                            RANKING_DICT_POINTS[game_state.run_id] = self.points
+                            RANKING_DICT_NAME[game_state.run_id] = game_state.user_name
+                            game_state.run_id += 1
+                        game_state.end = True
+                        self.set_win(screen, game_state)
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
@@ -91,22 +106,43 @@ class Level:
             player.on_ceiling = False
         
         if player.rect.y > screen_height:
-            RANKING_DICT_POINTS[game_state.run_id] = self.points
-            RANKING_DICT_NAME[game_state.run_id] = game_state.user_name
-            game_state.run_id += 1
             game_state.update("GAME OVER")
     
+    def set_win(self,screen, game_state):
+        win_text = self.get_font("assets/fonts/BebasNeue-Regular.ttf", 100).render("VOCÊ SOBREVIVEU", True, "Green")
+        win_rect = win_text.get_rect(center=(screen_width/2,screen_height/7))
+        screen.blit(win_text, win_rect)
+
+        self.set_buttons(game_state, screen) 
+    
+    def set_buttons(self,game_state, screen):
+        level_button = Button((100, 50), "<- NÍVEIS ")
+        level_button.update(screen)
+
+        ranking_button = Button((screen_width/1.1, 50), " RANKING ->")
+        ranking_button.update(screen)
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        if pygame.mouse.get_pressed()[0]:
+            if level_button.checkForInput(mouse_pos):
+                print("DEBUG: CLIQUE EM LEVEL")
+                game_state.update("SELECT_LEVEL")
+            if ranking_button.checkForInput(mouse_pos):
+                print("DEBUG: CLIQUE EM RANKING")
+                game_state.update("RANKING")
     def get_font(self, font_type, size):
         return pygame.font.Font(font_type, size)
     
     def countdown(self, screen, game_state):
-        initial_time = 18000  # Tempo inicial em milissegundos (18000ms = 18 segundos)
+        initial_time = 25000  # Tempo inicial em milissegundos (18000ms = 18 segundos)
         current_time = pygame.time.get_ticks()  # Tempo atual do jogo
         remaining_time = max(0, initial_time - (current_time - self.game_timer))  # Tempo restante
 
         if self.temporizer:
-            countdown_text = self.get_font("assets/fonts/BebasNeue-Regular.ttf", 50).render(f"Time: {remaining_time/1000}", True, "White")  # Exibição do tempo (convertido para segundos)
-            countdown_rect = countdown_text.get_rect(center=(screen_width/4, screen_height/7))
+            countdown_text = self.get_font("assets/fonts/BebasNeue-Regular.ttf", 50).render(f"{int(remaining_time/1000)}", True, "Red")  # Exibição do tempo (convertido para segundos)
+            countdown_rect = countdown_text.get_rect(center=(screen_width/2, screen_height/7))
+            self.points = remaining_time/1000
             screen.blit(countdown_text, countdown_rect)
 
             if remaining_time <= 0:
@@ -130,13 +166,14 @@ class Level:
             self.setup_level(level_map, game_state)  
             self.game_timer = pygame.time.get_ticks()  # Reiniciando o timer
             game_state.restart_level = False
+            game_state.end = False
+            self.win = False
             self.temporizer = True  # Habilitando o temporizador novamente
             self.points = 0
             if game_state.sound == "ON":
                 pygame.mixer.music.load("assets/music/Soundtrack da fase.mp3")
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(0.1)
-        self.points += 1
         #level tiles
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
@@ -146,8 +183,9 @@ class Level:
         self.player.update()
         self.player.draw(self.display_surface)
         self.horizontal_movement_collision()
-        self.vertical_movement_collision(game_state)
+        self.vertical_movement_collision(game_state, screen)
 
         # countdown
-        self.countdown(screen,game_state)
+        if not self.win:
+            self.countdown(screen,game_state)
         

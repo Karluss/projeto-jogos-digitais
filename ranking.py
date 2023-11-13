@@ -23,11 +23,11 @@ def ranking(screen, game_state):
     ranking_rect = ranking_text.get_rect(center=(screen_width/2,screen_height/7))
     screen.blit(ranking_text, ranking_rect)
 
-    top_five_dict = dict(sorted(RANKING_DICT_POINTS.items(), key=lambda item: item[1], reverse=True)[:6])
+    top_five_dict = dict(sorted(RANKING_DICT_POINTS.items(), key=lambda item: item[1], reverse=False)[:6])
 
     pos = 1
     for key in top_five_dict.keys():
-        set_ranking_text(f"{pos} - {RANKING_DICT_NAME[key]} - {RANKING_DICT_POINTS[key]}", pos, screen)
+        set_ranking_text(f"{pos} - {RANKING_DICT_NAME[key]} - {RANKING_DICT_POINTS[key]} SEGUNDOS", pos, screen)
         pos += 1
     
     back_button = Button((100, 50), "<- MENU")

@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2(0,0)
         self.speed = 5
         self.gravity = 0.8
-        self.jump_speed = -12
+        self.jump_speed = -14
 
         self.status = 'idle'
         self.facing_right = True
@@ -23,6 +23,8 @@ class Player(pygame.sprite.Sprite):
         self.on_ceiling = False
         self.on_left = False 
         self.on_right = False
+
+        self.stop = False
 
     def import_character_assets(self): 
         character_path = 'assets/graphics/character/'  
@@ -60,22 +62,24 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(midtop= self.rect.midtop)
 
     def get_input(self):
-        keys = pygame.key.get_pressed()  
 
-        if keys[pygame.K_RIGHT]: 
-            self.direction.x = 1
-            self.facing_right = True
-        elif keys[pygame.K_LEFT]:
-            self.direction.x = -1
-            self.facing_right = False
-        else: 
-            self.direction.x = 0
-        
-        if keys[pygame.K_SPACE] and not self.space_pressed: 
-            self.jump()
-            self.space_pressed = True
-        elif not keys[pygame.K_SPACE]:
-            self.space_pressed = False
+        if not self.stop:
+            keys = pygame.key.get_pressed()  
+
+            if keys[pygame.K_RIGHT]: 
+                self.direction.x = 1
+                self.facing_right = True
+            elif keys[pygame.K_LEFT]:
+                self.direction.x = -1
+                self.facing_right = False
+            else: 
+                self.direction.x = 0
+            
+            if keys[pygame.K_SPACE] and not self.space_pressed: 
+                self.jump()
+                self.space_pressed = True
+            elif not keys[pygame.K_SPACE]:
+                self.space_pressed = False
     
     def apply_gravity(self): 
         self.direction.y += self.gravity

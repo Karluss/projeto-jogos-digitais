@@ -7,6 +7,7 @@ class GameState:
         self.user_score = 0
         self.run_id = 1
         self.level = "PRAIA"
+        self.end = False
     
     def update(self, state): 
         self.state = state
