@@ -2,6 +2,11 @@ import pygame
 from tiles import Tile
 from settings_map import *
 from player import Player
+from game_state import GameState
+from game_over import game_over
+
+
+
 
 class Level:
     def __init__(self,level_data,surface):
@@ -9,8 +14,8 @@ class Level:
         self.setup_level(level_data)
         self.world_shift = 0
         self.current_x = 0
-        self.time_remaining = 60
-        self.start_time = pygame.time.get_ticks()
+        self.game_timer = pygame.time.get_ticks()
+        self.temporizer = True
 
     def setup_level(self,layout):
         self.tiles = pygame.sprite.Group()
@@ -87,21 +92,42 @@ class Level:
     def get_font(self, font_type, size):
         return pygame.font.Font(font_type, size)
     
-    def countdown(self,screen): 
-        elapsed_time = pygame.time.get_ticks() - self.start_time
-        remaining_seconds = max(0, self.time_remaining - elapsed_time / 1000)  # Convertendo milissegundos para segundos
-        countdown_text = self.get_font("assets/fonts/BebasNeue-Regular.ttf", 50).render(f"{remaining_seconds}", True, "Red")
-        countdown_rect = countdown_text.get_rect(center=(screen_width/2,screen_height/7))
-        screen.blit(countdown_text, countdown_rect)
-    def run(self, game_state, screen):
+    def countdown(self, screen, game_state):
+        initial_time = 18000  # Tempo inicial em milissegundos (18000ms = 18 segundos)
+        current_time = pygame.time.get_ticks()  # Tempo atual do jogo
+        remaining_time = max(0, initial_time - (current_time - self.game_timer))  # Tempo restante
 
+        if self.temporizer:
+            countdown_text = self.get_font("assets/fonts/BebasNeue-Regular.ttf", 50).render(f"Time: {remaining_time/1000}", True, "White")  # Exibição do tempo (convertido para segundos)
+            countdown_rect = countdown_text.get_rect(center=(screen_width/4, screen_height/7))
+            screen.blit(countdown_text, countdown_rect)
+
+            if remaining_time <= 0:
+                self.temporizer = False
+                game_state.update("GAME OVER")
+
+
+    def run(self, game_state, screen):
         if game_state.restart_level:
-            self.setup_level(level_map)  
+            self.setup_level(level_map)
+            self.game_timer = pygame.time.get_ticks()  # Reiniciando o timer
             game_state.restart_level = False
+            self.temporizer = True  # Habilitando o temporizador novamente
             if game_state.sound == "ON":
                 pygame.mixer.music.load("assets/music/Soundtrack da fase.mp3")
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(0.1)
+                pygame.mixer.music.set_volume(0.5)
+            
+
+    #def run(self, game_state, screen):
+
+        #if game_state.restart_level:
+            #self.setup_level(level_map)  
+            #game_state.restart_level = False
+            #if game_state.sound == "ON":
+                #pygame.mixer.music.load("assets/music/Soundtrack da fase.mp3")
+                #pygame.mixer.music.play(-1)
+                #pygame.mixer.music.set_volume(0.5)
 
         #level tiles
         self.tiles.update(self.world_shift)
@@ -115,5 +141,5 @@ class Level:
         self.vertical_movement_collision(game_state)
 
         # countdown
-        self.countdown(screen)
+        self.countdown(screen,game_state)
         
